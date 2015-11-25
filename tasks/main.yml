@@ -1,0 +1,63 @@
+- name: modify group
+  group:
+    name: "{{ zabbix_group }}"
+    system: yes
+    state: present
+
+- name: modify user
+  user:
+    name: "{{ zabbix_user }}"
+    group: "{{ zabbix_group }}"
+    home: "{{ zabbix_home }}"
+    createhome: yes
+    shell: /bin/false
+    system: yes
+    state: present
+
+- name: modify directory
+  file:
+    path: "{{ zabbix_home }}"
+    state: directory
+    owner: "{{ zabbix_user }}"
+    group: "{{ zabbix_group }}"
+    mode: 0755
+
+- name: install packages
+  apt:
+    name: "{{ item }}"
+    state: latest
+    force: yes
+  with_items:
+    - unzip
+    - libmariadbclient-dev
+    - libxml2-dev
+    - libsnmp-dev
+    - libcurl4-openssl-dev
+    - gettext
+
+- name: download zabbix
+  get_url:
+    url: "http://jaist.dl.sourceforge.net/project/zabbix/ZABBIX%20Latest%20Development/{{ zabbix_version }}/zabbix-{{ zabbix_version }}.tar.gz"
+    dest: "/usr/local/src/zabbix-{{ zabbix_version }}.tar.gz"
+
+- name: unzip zabbix
+  unarchive:
+    src: "/usr/local/src/zabbix-{{ zabbix_version }}.tar.gz"
+    dest: "/usr/local/src"
+    creates: "/usr/local/src/zabbix-{{ zabbix_version }}"
+    owner: "{{ zabbix_user }}"
+    group: "{{ zabbix_group }}"
+    copy: no
+
+- name: install zabbix
+  command: "{{ item }}"
+  args:
+    chdir: "/usr/local/src/zabbix-{{ zabbix_version }}"
+    creates: /usr/local/sbin/zabbix_server
+  with_items:
+    - "./configure --enable-server --enable-agent --enable-proxy --with-mysql --enable-ipv6 --with-net-snmp --with-libcurl --with-libxml2"
+    - "make install"
+
+- include: nginx.yml
+- include: php5-fpm.yml
+- include: mysql.yml

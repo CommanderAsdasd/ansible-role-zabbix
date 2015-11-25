@@ -1,0 +1,12 @@
+zabbix_version: "3.0.0alpha4"
+
+zabbix_user: zabbix
+zabbix_group: zabbix
+zabbix_home: /etc/zabbix
+
+zabbix_nginx_accesslog: /var/log/nginx/zabbix-access.log
+
+zabbix_mysql_host: localhost
+zabbix_mysql_database: zabbix
+zabbix_mysql_user: zabbix
+zabbix_mysql_password: zabbix

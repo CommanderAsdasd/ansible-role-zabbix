@@ -1,0 +1,8 @@
+- name: modify php5-fpm config
+  template:
+    src: php5-fpm/zabbix.conf
+    dest: /etc/php5/fpm/pool.d/zabbix.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart php5-fpm
