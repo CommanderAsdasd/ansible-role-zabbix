@@ -1,12 +1,21 @@
+galaxy_info:
+  author: mats116
+  description: "Zabbix Server installer"
+  license: MIT
+  min_ansible_version: 1.9
+  platforms:
+    - name: Ubuntu
+      versions:
+        - trusty
+  galaxy_tags:
+    - zabbix
 dependencies:
-  - role: nginx 
-
-  - role: php5-fpm
+  - role: mats116.nginx 
+  - role: mats116.php5-fpm
     php_version: "5.6"
     max_execution_time: 300
     max_input_time: 300
     post_max_size: 16M
     always_populate_raw_post_data: -1
-
-  - role: mariadb-server
+  - role: mats116.mariadb-server
     when: "zabbix_mysql_host == 'localhost'"

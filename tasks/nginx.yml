@@ -7,10 +7,15 @@
     mode: 0644
   notify: restart nginx
 
-- name: modify zabbix frontend
-  command: "{{ item }}"
+- name: copy zabbix frontend source
+  command: "cp -prf /usr/local/src/zabbix-{{ zabbix_version }}/frontends/php /usr/share/nginx/zabbix"
   args:
-    creates: /usr/share/nginx/zabbix/index.php
-  with_items:
-    - "cp -prf /usr/local/src/zabbix-{{ zabbix_version }}/frontends/php /usr/share/nginx/zabbix"
-    - "chown nginx:nginx -R /usr/share/nginx/zabbix"
+    creates: /usr/share/nginx/zabbix
+
+- name: modify zabbix frontend directory
+  file:
+    path: /usr/share/nginx/zabbix
+    state: directory
+    owner: nginx
+    group: nginx
+    recurse: yes
