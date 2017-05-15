@@ -1,7 +1,7 @@
 # README.md
-# Ansible Role: mats116.zabbix
+# Ansible Role: mats116.zabbix forked
 
-An Ansible role that installs Zabbix 3.0alpha4 on **Ubuntu 14.04 LTS**
+An Ansible role that installs Zabbix 3.0alpha4 on **Ubuntu 14.04 LTS** - fixed php-fpm5.6 name changed bugs 
 
 ## Requirements
 
